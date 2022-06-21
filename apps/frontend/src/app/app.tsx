@@ -1,6 +1,7 @@
 import { Todo } from '@tadone/data';
-import { Todos } from '@tadone/ui';
+import { Navbar, Todos } from '@tadone/ui';
 import { useEffect, useState } from 'react';
+import { Outlet } from 'react-router-dom';
 
 export const App = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -24,7 +25,12 @@ export const App = () => {
 
   return (
     <div className='container mx-auto px-4'>
-      <h1>Todos</h1>
+      <Navbar></Navbar>
+        <main>
+          <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+            <Outlet />
+          </div>
+        </main>
       <Todos todos={todos} />
       <button id={'add-todo'} onClick={addTodo}>
         Add Todo
