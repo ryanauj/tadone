@@ -23,13 +23,13 @@ export const App = () => {
   }
 
   return (
-    <>
+    <div className='container mx-auto px-4'>
       <h1>Todos</h1>
       <Todos todos={todos} />
       <button id={'add-todo'} onClick={addTodo}>
         Add Todo
       </button>
-    </>
+    </div>
   );
 };
 
