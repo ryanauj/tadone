@@ -1,5 +1,5 @@
 import { Todo } from '@tadone/data';
-import { Express } from 'express';
+import { Express, response } from 'express';
 
 let todos: Todo[] = [{ id: '1', title: 'Todo 1' }, { id: '2', title: 'Todo 2' }];
 
@@ -14,8 +14,10 @@ export function addTodoRoutes(app: Express) {
     todos.push(newTodo);
     resp.send(newTodo);
   });
-  app.delete('/api/todos/:todoId', (req) => {
+  app.delete('/api/todos/:todoId', (req, resp) => {
+    console.log('req.params', req.params)
     const { todoId } = req.params
-    todos = todos.filter(({id}) => id === todoId)
+    todos = todos.filter(({id}) => id !== todoId)
+    resp.send({})
   })
 }
