@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@tadone/client": ["libs/client/src/index.ts"],
       "@tadone/data": ["libs/data/src/index.ts"],
       "@tadone/ui": ["libs/ui/src/index.ts"]
     }
