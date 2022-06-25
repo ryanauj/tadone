@@ -1,25 +1,38 @@
 import { Todo } from '@tadone/data';
-import { Express, Request, Response } from 'express';
+import { Request, Response, Router } from 'express';
+
+const todoRouter = Router();
 
 let todos: Todo[] = [];
 
-export function addTodoRoutes(app: Express) {
-  app.get('/api/todos', (_req, resp: Response) => resp.send(todos));
-  app.post('/api/todos', (req: Request, resp: Response) => {
-    const id = Math.floor(Math.random() * 1000).toString();
-    console.log(req.body);
-    const newTodo = {
-      ...req.body,
-      id
-    };
-    todos.push(newTodo);
-    console.log(todos);
-    resp.send(newTodo);
-  });
-  app.delete('/api/todos/:todoId', (req, resp) => {
-    console.log('req.params', req.params)
-    const { todoId } = req.params
-    todos = todos.filter(({id}) => id !== todoId)
-    resp.send({})
-  })
+function removeTodo(todoId: string) {
+  todos = todos.filter(({id}) => id !== todoId);
 }
+
+todoRouter.get(
+  '/',
+  (_req, resp: Response<Todo[]>) => resp.send(todos)
+);
+
+todoRouter.put(
+  '/',
+  (req: Request<unknown, unknown, Todo>, resp: Response) => {
+    const todo = req.body;
+    if (todo.id === '' || todo.id === undefined) {
+      todo.id = Math.floor(Math.random() * 1000).toString();
+    }
+    else {
+      removeTodo(todo.id);
+    }
+    todos.push(todo);
+    resp.send(todo);
+  });
+
+todoRouter.delete('/:todoId', (req, resp) => {
+  console.log('req.params', req.params)
+  const { todoId } = req.params
+  removeTodo(todoId);
+  resp.send({});
+  })
+
+export default todoRouter;

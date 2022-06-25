@@ -1,4 +1,4 @@
-import { addTodo, getAllTodos } from '@tadone/client';
+import { putTodo, getAllTodos } from '@tadone/client';
 import { Todos } from '@tadone/ui';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { Link } from 'react-router-dom';
@@ -10,7 +10,7 @@ export function Dashboard(props: DashboardProps) {
   const queryClient = useQueryClient();
 
   const query = useQuery('todos', getAllTodos);
-  const mutation = useMutation(addTodo, {
+  const mutation = useMutation(putTodo, {
     onSuccess: () => {
       queryClient.invalidateQueries('todos');
     }

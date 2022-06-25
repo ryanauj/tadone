@@ -1,14 +1,16 @@
-import { Input } from '@tadone/ui';
-import { Todo } from '@tadone/data';
-import { ChangeEvent, FormEvent, useState } from 'react';
 import { putTodo } from '@tadone/client';
+import { Todo } from '@tadone/data';
+import { Input } from '@tadone/ui';
+import { ChangeEvent, FormEvent, useState } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 
 /* eslint-disable-next-line */
-export interface AddTodoProps {}
+export interface EditTodoProps {
+  todoId: string;
+}
 
-export function AddTodo(props: AddTodoProps) {
+export function EditTodo(props: EditTodoProps) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [todo, setTodo] = useState<Todo>({
@@ -61,4 +63,4 @@ export function AddTodo(props: AddTodoProps) {
   );
 }
 
-export default AddTodo;
+export default EditTodo;

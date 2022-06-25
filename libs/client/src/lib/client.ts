@@ -12,11 +12,11 @@ export function getAllTodos(): Promise<Todo[]> {
   return safeFetch<Todo[]>('/api/todos');
 }
 
-export function addTodo(todo: Todo): Promise<Todo> {
+export function putTodo(todo: Todo): Promise<Todo> {
   return safeFetch<Todo>(
     '/api/todos',
     {
-      method: 'POST',
+      method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
       },

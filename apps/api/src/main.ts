@@ -4,12 +4,12 @@
  */
 
 import * as express from 'express';
-import { addTodoRoutes } from './app/todos';
+import todoRouter from './app/todos';
 
 const app = express();
-app.use(express.json())
+app.use(express.json());
 
-addTodoRoutes(app);
+app.use('/api/todos', todoRouter);
 
 const port = process.env.port || 3333;
 const server = app.listen(port, () => {

@@ -1,3 +1,4 @@
+export * from './lib/edit-todo/edit-todo';
 export * from './lib/input/input';
 export * from './lib/add-todo/add-todo';
 export * from './lib/navbar/navbar';
