@@ -44,7 +44,7 @@ export function AddTodo(props: AddTodoProps) {
         onSubmit={handleSubmit}
       >
         <div className='mb-4'>
-          <Input label='Title' name='title' type='text' value={todo.title} onChange={handleChange} />
+          <Input label='Title' name='title' type='text' value={todo.title} onChange={handleChange} autoFocus={true} />
         </div>
         <div className='mb-6'>
           <Input label='Description' name='description' type='text' value={todo.description} onChange={handleChange} />

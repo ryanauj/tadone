@@ -6,10 +6,19 @@ export interface InputProps {
   name: string;
   type: string;
   value: string;
+  autoFocus?: boolean;
   onChange: React.ChangeEventHandler<HTMLInputElement> | undefined;
 }
 
-export function Input({label, name, type, value, onChange}: InputProps) {
+export function Input({
+  label,
+  name,
+  type,
+  value,
+  autoFocus = false,
+  onChange
+}: InputProps
+) {
   const id = `${uuidv4()}_${name}`;
   return (
     <>
@@ -22,6 +31,7 @@ export function Input({label, name, type, value, onChange}: InputProps) {
         name={name}
         type={type}
         onChange={onChange}
+        autoFocus={autoFocus}
         value={value}
         placeholder={label}
       />
