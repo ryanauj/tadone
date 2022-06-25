@@ -1,6 +1,7 @@
 import { addTodo, getAllTodos } from '@tadone/client';
 import { Todos } from '@tadone/ui';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { Link } from 'react-router-dom';
 
 /* eslint-disable-next-line */
 export interface DashboardProps {}
@@ -18,11 +19,16 @@ export function Dashboard(props: DashboardProps) {
   return (
     <>
       <Todos todos={query.data} />
-      <button id={'add-todo'} onClick={() => {
-        mutation.mutate()
-      }}>
-        Add Todo
-      </button>
+      <Link
+        to='/todos/add'
+      >
+        <button
+          id={'add-todo'}
+          className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded'
+        >
+          Add Todo
+        </button>
+      </Link>
     </>
   );
 }

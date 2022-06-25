@@ -1,17 +1,19 @@
 import { Todo } from '@tadone/data';
-import { Express, response } from 'express';
+import { Express, Request, Response } from 'express';
 
-let todos: Todo[] = [{ id: '1', title: 'Todo 1' }, { id: '2', title: 'Todo 2' }];
+let todos: Todo[] = [];
 
 export function addTodoRoutes(app: Express) {
-  app.get('/api/todos', (_req, resp) => resp.send(todos));
-  app.post('/api/todos', (_req, resp) => {
+  app.get('/api/todos', (_req, resp: Response) => resp.send(todos));
+  app.post('/api/todos', (req: Request, resp: Response) => {
     const id = Math.floor(Math.random() * 1000).toString();
-    const newTodo: Todo = {
-      id,
-      title: `New todo ${id}`,
+    console.log(req.body);
+    const newTodo = {
+      ...req.body,
+      id
     };
     todos.push(newTodo);
+    console.log(todos);
     resp.send(newTodo);
   });
   app.delete('/api/todos/:todoId', (req, resp) => {
