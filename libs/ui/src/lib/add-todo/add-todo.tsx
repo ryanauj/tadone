@@ -1,6 +1,6 @@
 import { Input } from '@tadone/ui';
 import { Todo } from '@tadone/data';
-import { ChangeEvent, FormEvent, useState } from 'react';
+import { ChangeEvent, FormEvent, MouseEvent, useState } from 'react';
 import { putTodo } from '@tadone/client';
 import { useMutation, useQueryClient } from 'react-query';
 import { useNavigate } from 'react-router-dom';
@@ -37,6 +37,11 @@ export function AddTodo(props: AddTodoProps) {
     navigate('/todos');
   }
 
+  const handleCancel = (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    navigate('/todos');
+  }
+
   return (
     <div className='w-full max-w-xs'>
       <form
@@ -47,9 +52,15 @@ export function AddTodo(props: AddTodoProps) {
           <Input label='Title' name='title' type='text' value={todo.title} onChange={handleChange} autoFocus={true} />
         </div>
         <div className='mb-6'>
-          <Input label='Description' name='description' type='text' value={todo.description} onChange={handleChange} />
+          <Input label='Description' name='description' type='textarea' value={todo.description} onChange={handleChange} />
         </div>
         <div className='flex items-center justify-between'>
+          <button
+            className='bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'
+            onClick={handleCancel}
+          >
+            Cancel
+          </button>
           <input
             className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'
             type='submit'
