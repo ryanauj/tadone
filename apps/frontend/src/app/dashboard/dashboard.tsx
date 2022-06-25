@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 /* eslint-disable-next-line */
 export interface DashboardProps {}
 
-export function Dashboard(props: DashboardProps) {
+export function Dashboard(_props: DashboardProps) {
   const query = useQuery('todos', getAllTodos);
 
   return (

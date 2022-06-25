@@ -17,6 +17,7 @@ todoRouter.get(
 todoRouter.put(
   '/',
   (req: Request<unknown, unknown, Todo>, resp: Response) => {
+    console.log('req.params', req.body)
     const todo = req.body;
     if (todo.id === '' || todo.id === undefined) {
       todo.id = Math.floor(Math.random() * 1000).toString();
@@ -28,11 +29,13 @@ todoRouter.put(
     resp.send(todo);
   });
 
-todoRouter.delete('/:todoId', (req, resp) => {
-  console.log('req.params', req.params)
-  const { todoId } = req.params
-  removeTodo(todoId);
-  resp.send({});
+todoRouter.delete(
+  '/:todoId',
+  (req, resp) => {
+    console.log('req.params', req.params)
+    const { todoId } = req.params
+    removeTodo(todoId);
+    resp.send({});
   })
 
 export default todoRouter;

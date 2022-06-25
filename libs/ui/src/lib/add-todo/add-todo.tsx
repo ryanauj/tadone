@@ -32,12 +32,14 @@ export function AddTodo(props: AddTodoProps) {
   })
 
   const handleSubmit = (e: FormEvent) => {
+    console.log('submit');
     e.preventDefault();
     mutation.mutate(todo);
     navigate('/todos');
   }
 
-  const handleCancel = (e: MouseEvent<HTMLButtonElement>) => {
+  const handleCancel = (e: MouseEvent<HTMLDivElement>) => {
+    console.log('cancel');
     e.preventDefault();
     navigate('/todos');
   }
@@ -55,12 +57,12 @@ export function AddTodo(props: AddTodoProps) {
           <Input label='Description' name='description' type='textarea' value={todo.description} onChange={handleChange} />
         </div>
         <div className='flex items-center justify-between'>
-          <button
+          <div
             className='bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'
             onClick={handleCancel}
           >
             Cancel
-          </button>
+          </div>
           <input
             className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'
             type='submit'
