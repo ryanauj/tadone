@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Input } from '@tadone/ui';
 import { ChangeEvent, FormEvent, MouseEvent, useState } from 'react';
 import { EmptyTodo, Todo } from '@tadone/data';
-import { isError, useMutation, useQuery, useQueryClient } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 
 /* eslint-disable-next-line */
 export interface EditTodoProps {}
@@ -14,32 +14,36 @@ export function EditTodo(props: EditTodoProps) {
   if (todoId === undefined) {
     throw new Error("Route param 'todoId' cannot be undefined!");
   }
-  const navigate = useNavigate();
-  const queryClient = useQueryClient();
-
-  const mutation = useMutation(putTodo, {
-    onSuccess: () => {
-      queryClient.invalidateQueries('todos');
-    }
-  })
 
   const [todo, setTodo] = useState<Todo>(EmptyTodo());
-  const {isLoading, isError} = useQuery(['todos', todoId], () => getTodo(todoId), { onSuccess: setTodo });
-
+  const {isLoading, isError} = useQuery(
+    ['todos', todoId],
+    () => getTodo(todoId),
+    { onSuccess: setTodo }
+  );
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setTodo((prev) => ({
       ...prev,
       [name]: value,
     }));
+    console.log(todo);
   };
 
+  const queryClient = useQueryClient();
+  const mutation = useMutation(putTodo, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('todos');
+    }
+  })
+
+  const navigate = useNavigate();
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
+    console.log(todo);
     mutation.mutate(todo);
     navigate('/todos');
   }
-
   const handleCancel = (e: MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
     navigate('/todos');

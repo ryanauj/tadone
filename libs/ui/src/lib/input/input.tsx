@@ -8,7 +8,7 @@ export interface InputProps {
   rows?: number,
   value: string;
   autoFocus?: boolean;
-  onChange: React.ChangeEventHandler<HTMLInputElement> | undefined;
+  onChange: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> | undefined;
 }
 
 export function Input({
@@ -34,6 +34,8 @@ export function Input({
             name={name}
             rows={rows}
             className='shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 py-2 px-3 block w-full sm:text-sm border border-gray-300 rounded-md'
+            onChange={onChange}
+            autoFocus={autoFocus}
             placeholder={label}
             defaultValue={''}
           />

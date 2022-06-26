@@ -17,7 +17,8 @@ export function getTodo(todoId: string): Promise<Todo> {
   return safeFetch<Todo>(`/api/todos/${todoId}`);
 }
 
-export function putTodo(todo: Todo | undefined): Promise<Todo> {
+export function putTodo(todo: Todo): Promise<Todo> {
+  console.log(todo)
   return safeFetch<Todo>(
     '/api/todos',
     {
