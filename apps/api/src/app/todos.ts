@@ -2,6 +2,9 @@ import { TodoMetadata } from '@tadone/data';
 import { Todo } from '@tadone/data';
 import { Request, Response, Router } from 'express';
 
+// Are all express methods essentially just middleware?
+// Since order seems to matter with these as well?
+
 const todoRouter = Router();
 
 let todos: Todo[] = [];
@@ -18,17 +21,23 @@ function buildErrorResponse(todoId: string): Todo {
   };
 }
 
+todoRouter.use((req, res, next) => {
+  console.log('before');
+  next();
+});
+
 todoRouter.get(
   '/',
-  (_req, resp: Response<TodoMetadata[]>) => {
+  (_req, resp: Response<TodoMetadata[]>, next) => {
     const todoMetadata = todos.map(({ id, title }) => ({ id, title }))
     resp.send(todoMetadata)
+    next()
   }
 );
 
 todoRouter.get(
   '/:todoId',
-  (req, resp: Response<Todo>) => {
+  (req, resp: Response<Todo>, next) => {
     const { todoId } = req.params;
     const todo = todos.find(({id}) => id === todoId);
 
@@ -38,13 +47,15 @@ todoRouter.get(
     else {
       resp.send(todo);
     }
+    next();
   }
 );
 
 todoRouter.put(
   '/',
-  (req: Request<unknown, unknown, Todo>, resp: Response) => {
+  (req: Request<unknown, unknown, Todo>, resp: Response, next) => {
     const todo = req.body;
+    console.log(todo);
     if (todo.id === '' || todo.id === undefined) {
       todo.id = Math.floor(Math.random() * 1000).toString();
     }
@@ -53,14 +64,22 @@ todoRouter.put(
     }
     todos.push(todo);
     resp.send(todo);
+    next();
   });
 
 todoRouter.delete(
   '/:todoId',
-  (req, resp) => {
+  (req, resp, next) => {
     const { todoId } = req.params
     removeTodo(todoId);
     resp.send({});
+    next();
   })
+
+todoRouter.use((req, res, next) => {
+  console.log('after');
+  console.log(todos);
+  next();
+});
 
 export default todoRouter;
