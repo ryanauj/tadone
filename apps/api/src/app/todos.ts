@@ -1,3 +1,4 @@
+import { TodoMetadata } from '@tadone/data';
 import { Todo } from '@tadone/data';
 import { Request, Response, Router } from 'express';
 
@@ -9,15 +10,40 @@ function removeTodo(todoId: string) {
   todos = todos.filter(({id}) => id !== todoId);
 }
 
+function buildErrorResponse(todoId: string): Todo {
+  return {
+    id: undefined,
+    title: `Todo '${todoId}' not found`,
+    description: `Todo with id '${todoId}' could not be found`
+  };
+}
+
 todoRouter.get(
   '/',
-  (_req, resp: Response<Todo[]>) => resp.send(todos)
+  (_req, resp: Response<TodoMetadata[]>) => {
+    const todoMetadata = todos.map(({ id, title }) => ({ id, title }))
+    resp.send(todoMetadata)
+  }
+);
+
+todoRouter.get(
+  '/:todoId',
+  (req, resp: Response<Todo>) => {
+    const { todoId } = req.params;
+    const todo = todos.find(({id}) => id === todoId);
+
+    if (todo === undefined) {
+      resp.status(404).send(buildErrorResponse(todoId));
+    }
+    else {
+      resp.send(todo);
+    }
+  }
 );
 
 todoRouter.put(
   '/',
   (req: Request<unknown, unknown, Todo>, resp: Response) => {
-    console.log('req.params', req.body)
     const todo = req.body;
     if (todo.id === '' || todo.id === undefined) {
       todo.id = Math.floor(Math.random() * 1000).toString();
@@ -32,7 +58,6 @@ todoRouter.put(
 todoRouter.delete(
   '/:todoId',
   (req, resp) => {
-    console.log('req.params', req.params)
     const { todoId } = req.params
     removeTodo(todoId);
     resp.send({});

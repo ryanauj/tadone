@@ -1,4 +1,4 @@
-import { getAllTodos } from '@tadone/client';
+import { getAllTodosMetadata } from '@tadone/client';
 import { Todos } from '@tadone/ui';
 import { useQuery } from 'react-query';
 import { Link } from 'react-router-dom';
@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 export interface DashboardProps {}
 
 export function Dashboard(_props: DashboardProps) {
-  const query = useQuery('todos', getAllTodos);
+  const query = useQuery('todos', getAllTodosMetadata);
 
   return (
     <>

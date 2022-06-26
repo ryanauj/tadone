@@ -1,23 +1,30 @@
-import { putTodo } from '@tadone/client';
-import { Todo } from '@tadone/data';
+import { getTodo, putTodo } from '@tadone/client';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Input } from '@tadone/ui';
-import { ChangeEvent, FormEvent, useState } from 'react';
-import { useMutation, useQueryClient } from 'react-query';
-import { useNavigate } from 'react-router-dom';
+import { ChangeEvent, FormEvent, MouseEvent, useState } from 'react';
+import { EmptyTodo, Todo } from '@tadone/data';
+import { isError, useMutation, useQuery, useQueryClient } from 'react-query';
 
 /* eslint-disable-next-line */
-export interface EditTodoProps {
-  todoId: string;
-}
+export interface EditTodoProps {}
 
 export function EditTodo(props: EditTodoProps) {
+  const routeParams = useParams();
+  const { todoId }  = routeParams;
+  if (todoId === undefined) {
+    throw new Error("Route param 'todoId' cannot be undefined!");
+  }
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const [todo, setTodo] = useState<Todo>({
-    id: '',
-    title: '',
-    description: ''
-  });
+
+  const mutation = useMutation(putTodo, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('todos');
+    }
+  })
+
+  const [todo, setTodo] = useState<Todo>(EmptyTodo());
+  const {isLoading, isError} = useQuery(['todos', todoId], () => getTodo(todoId), { onSuccess: setTodo });
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -27,16 +34,23 @@ export function EditTodo(props: EditTodoProps) {
     }));
   };
 
-  const mutation = useMutation(putTodo, {
-    onSuccess: () => {
-      queryClient.invalidateQueries('todos');
-    }
-  })
-
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     mutation.mutate(todo);
     navigate('/todos');
+  }
+
+  const handleCancel = (e: MouseEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    navigate('/todos');
+  }
+
+  if (isLoading) {
+    return <span>Loading</span>
+  }
+
+  if (isError) {
+    return <span>Error</span>
   }
 
   return (
@@ -46,16 +60,22 @@ export function EditTodo(props: EditTodoProps) {
         onSubmit={handleSubmit}
       >
         <div className='mb-4'>
-          <Input label='Title' name='title' type='text' value={todo.title} onChange={handleChange} />
+          <Input label='Title' name='title' type='text' value={todo.title} onChange={handleChange} autoFocus={true} />
         </div>
         <div className='mb-6'>
-          <Input label='Description' name='description' type='text' value={todo.description} onChange={handleChange} />
+          <Input label='Description' name='description' type='textarea' value={todo.description} onChange={handleChange} />
         </div>
         <div className='flex items-center justify-between'>
+          <div
+            className='bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'
+            onClick={handleCancel}
+          >
+            Cancel
+          </div>
           <input
             className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'
             type='submit'
-            value='Create'
+            value='Save'
           />
         </div>
       </form>

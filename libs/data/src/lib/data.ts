@@ -6,3 +6,11 @@ export interface TodoMetadata {
 export interface Todo extends TodoMetadata {
   description: string;
 }
+
+export function EmptyTodo(): Todo {
+  return {
+    id: '',
+    title: '',
+    description: ''
+  }
+}
